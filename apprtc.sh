@@ -24,9 +24,17 @@ ln -s `pwd`/src/collider/collidermain $GOPATH/src
 ln -s `pwd`/src/collider/collider $GOPATH/src
 go get collidermain
 go install collidermain
-$GOPATH/bin/collidermain -port=8089 -tls=true
-
+sudo openssl req -x509 -newkey rsa:2048 -keyout /cert/key.pem -out /cert/cert.pem -days 99999 -nodes
+$GOPATH/bin/collidermain -port=8089 -tls=true -room-server=https://apprtc-147002.appspot.co
 
 sudo gcloud init
 export PATH=$PATH:/usr/lib/google-cloud-sdk/bin:/usr/local/go/bin
+gcloud beta auth application-default login
+
 dev_appserver.py --api_host 0.0.0.0 --api_port 8081 --admin_host 0.0.0.0 --admin_port 8082 out/app_engine/
+
+#To test stun server
+sudo apt-get install stun
+#Then test a server, e.g meetme.id
+stun meetme.id
+# or visit https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/

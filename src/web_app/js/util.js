@@ -93,6 +93,25 @@ function sendUrlRequest(method, url, async, body) {
 // }
 function requestIceServers(iceServerRequestUrl, iceTransports) {
   return new Promise(function(resolve, reject) {
+    var servers = [
+      {
+        credential: "public",
+        username: "public",
+        urls: [
+          "turn:turn.meetme.id:443?transport=udp",
+          "turn:turn.meetme.id:443?transport=tcp"
+        ]
+      },
+      {
+        urls: ['stun:stun.meetme.id:443']
+      }
+    ];
+    resolve(servers);
+  });
+}
+/*
+function requestIceServers(iceServerRequestUrl, iceTransports) {
+  return new Promise(function(resolve, reject) {
     sendAsyncUrlRequest('POST', iceServerRequestUrl).then(function(response) {
       var iceServerRequestResponse = parseJSON(response);
       if (!iceServerRequestResponse) {
@@ -110,7 +129,7 @@ function requestIceServers(iceServerRequestUrl, iceTransports) {
     });
   });
 }
-
+*/
 // Parse the supplied JSON, or return null if parsing fails.
 function parseJSON(json) {
   try {

@@ -29,11 +29,8 @@ CALLSTATS_PARAMS = {
 WSS_INSTANCE_HOST_KEY = 'host_port_pair'
 WSS_INSTANCE_NAME_KEY = 'vm_name'
 WSS_INSTANCE_ZONE_KEY = 'zone'
-WSS_INSTANCES = [{
-    WSS_INSTANCE_HOST_KEY: 'localhost:8089',
-    WSS_INSTANCE_NAME_KEY: 'wsserver-std_0',
-    WSS_INSTANCE_ZONE_KEY: 'europe-west1-b'
-}, {
+WSS_INSTANCES = [
+{
     WSS_INSTANCE_HOST_KEY: 'apprtc-ws.webrtc.org:443',
     WSS_INSTANCE_NAME_KEY: 'wsserver-std',
     WSS_INSTANCE_ZONE_KEY: 'us-central1-a'
