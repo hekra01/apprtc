@@ -27,14 +27,14 @@ var cl *Collider
 var port = flag.Int("port", 8089, "The port that Collider listens to")
 
 func startCollider() {
-	serverAddr = "localhost:" + strconv.Itoa(*port)
+	serverAddr = ":" + strconv.Itoa(*port)
 
 	cl = &Collider{
 		roomTable: newRoomTable(registerTimeout, "http://"+serverAddr),
 		dash:      newDashboard(),
 	}
-
-	go cl.Run(*port, false)
+	// no TLS
+	go cl.Run(*port, false, "", "")
 	fmt.Println("Test WebSocket server listening on ", serverAddr)
 }
 
