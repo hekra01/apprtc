@@ -349,8 +349,9 @@ Call.prototype.connectToRoom_ = function(roomId) {
 Call.prototype.maybeGetMedia_ = function() {
   // mediaConstraints.audio and mediaConstraints.video could be objects, so
   // check '!=== false' instead of '=== true'.
-  var needStream = (this.params_.mediaConstraints.audio !== false ||
-                    this.params_.mediaConstraints.video !== false);
+  var needStream = false;
+  //(this.params_.mediaConstraints.audio !== false ||
+  //                  this.params_.mediaConstraints.video !== false);
   var mediaPromise = null;
   if (needStream) {
     var mediaConstraints = this.params_.mediaConstraints;

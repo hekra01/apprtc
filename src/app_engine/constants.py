@@ -30,15 +30,29 @@ WSS_INSTANCE_HOST_KEY = 'host_port_pair'
 WSS_INSTANCE_NAME_KEY = 'vm_name'
 WSS_INSTANCE_ZONE_KEY = 'zone'
 WSS_INSTANCES = [
+# for local
 {
-    WSS_INSTANCE_HOST_KEY: 'localhost:8089',
-    WSS_INSTANCE_NAME_KEY: 'instance-1',
-    WSS_INSTANCE_ZONE_KEY: 'europe-west1-c'
-}, {
+      WSS_INSTANCE_HOST_KEY: 'apprtc-ws.webrtc.org:443',
+      WSS_INSTANCE_NAME_KEY: 'wsserver-std',
+      WSS_INSTANCE_ZONE_KEY: 'us-central1-a'
+},
+{
     WSS_INSTANCE_HOST_KEY: 'apprtc-ws-2.webrtc.org:443',
     WSS_INSTANCE_NAME_KEY: 'wsserver-std-2',
     WSS_INSTANCE_ZONE_KEY: 'us-central1-f'
-}]
+},
+{
+# for deploy
+    WSS_INSTANCE_HOST_KEY: '104.199.31.168:8089',
+    WSS_INSTANCE_NAME_KEY: 'instance-1',
+    WSS_INSTANCE_ZONE_KEY: 'europe-west1-c'
+}, 
+{
+    WSS_INSTANCE_HOST_KEY: 'apprtc-ws-2.webrtc.org:443',
+    WSS_INSTANCE_NAME_KEY: 'wsserver-std-2',
+    WSS_INSTANCE_ZONE_KEY: 'us-central1-f'
+}
+]
 
 WSS_HOST_PORT_PAIRS = [ins[WSS_INSTANCE_HOST_KEY] for ins in WSS_INSTANCES]
 

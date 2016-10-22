@@ -1,3 +1,5 @@
+#!/bin/sh
+#####1-INSTALL
 sudo npm -g install grunt-cli
 sudo apt-get install python-pip
 sudo apt-get install python-webtest
@@ -31,10 +33,23 @@ sudo gcloud init
 export PATH=$PATH:/usr/lib/google-cloud-sdk/bin:/usr/local/go/bin
 gcloud beta auth application-default login
 
-dev_appserver.py --api_host 0.0.0.0 --api_port 8081 --admin_host 0.0.0.0 --admin_port 8082 out/app_engine/
+dev_appserver.py --host localhost --port 8084 --api_host localhost --api_port 8081 --admin_host localhost --admin_port 8082 out/app_engine/
 
-#To test stun server
+cd ~/RTC/apprtc/out/app_engine
+gcloud app deploy
+
+
+#####2-ICE
 sudo apt-get install stun
 #Then test a server, e.g meetme.id
 stun meetme.id
 # or visit https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
+# stun.stunprotocol.org (UDP and TCP ports 3478).
+
+
+#####3-SSL
+openssl req -new -x509 -newkey rsa:4096 -days 3650 -keyout privkey.pem -out server.pem
+openssl rsa -in privkey.pem -out privkey.pem
+sudo mv privkey.pem /cert/key.pem
+sudo mv server.pem /cert/cert.pem
+$GOPATH/bin/collidermain -port=8089 -tls=true -room-server=apprtc-147002.appspot.com
