@@ -128,8 +128,7 @@ function requestIceServers(iceServerRequestUrl, iceTransports) {
       return;
     });
   });
-}
-*/
+}*/
 // Parse the supplied JSON, or return null if parsing fails.
 function parseJSON(json) {
   try {

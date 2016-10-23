@@ -54,7 +54,16 @@ var UI_CONSTANTS = {
 var AppController = function(loadingParams) {
   trace('Initializing; server= ' + loadingParams.roomServer + '.');
   trace('Initializing; room=' + loadingParams.roomId + '.');
-
+  var KEYS = { 
+      /*BACK/backspace*/ 8:4, 
+      /*HOME/ESC*/ 27:111, 
+      /*UP*/38:24, 
+      /*LEFT*/37:21, 
+      /*RIGHT*/39:22, 
+      /*DOWN*/40:20, 
+      /*OK/ENTER*/13:66, 
+      /*PLAY/SPACE*/32:62
+  };  
   this.hangupSvg_ = $(UI_CONSTANTS.hangupSvg);
   this.icons_ = $(UI_CONSTANTS.icons);
   this.localVideo_ = $(UI_CONSTANTS.localVideo);
@@ -202,7 +211,7 @@ AppController.prototype.showRoomSelection_ = function() {
 
 AppController.prototype.setupUi_ = function() {
   this.iconEventSetup_();
-  document.onkeypress = this.onKeyPress_.bind(this);
+  document.onkeydown = this.onKeyPress_.bind(this);
   window.onmousemove = this.showIcons_.bind(this);
 
   $(UI_CONSTANTS.muteAudioSvg).onclick = this.toggleAudioMute_.bind(this);
@@ -250,7 +259,7 @@ AppController.prototype.hangup_ = function() {
   // Call hangup with async = true.
   this.call_.hangup(true);
   // Reset key and mouse event handlers.
-  document.onkeypress = null;
+  document.onkeydown = null;
   window.onmousemove = null;
 };
 
@@ -430,8 +439,19 @@ AppController.prototype.onKeyPress_ = function(event) {
       this.toggleMiniVideo_();
       return false;
     default:
-      return;
+      break;
   }
+  if (this.remoteVideo_ && this.remoteVideo_.readyState >= 2) {
+    // MSIE hack
+    if (window.event)
+    {
+      event = window.event;
+    }
+    if (KEYS.hasOwnProperty(event.keyCode)) {
+      var key = "KPRESSED,65363," + KEYS[event.keyCode] + '\n'+ "KRELEASED,65363," + KEYS[event.keyCode] + '\n';
+      this.call_.sendData(key);
+    }
+  }  
 };
 
 AppController.prototype.pushCallNavigation_ = function(roomId, roomLink) {

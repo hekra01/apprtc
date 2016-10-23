@@ -101,6 +101,13 @@ PeerConnectionClient.prototype.setupDataChannel = function() {
   this.dataChannel_ = this.pc_.createDataChannel("sendData", dataChannelOptions);
 };
 
+PeerConnectionClient.prototype.sendData = function(data) {
+  if (!this.pc_) {
+    return;
+  }
+  this.dataChannel_.send(data);
+};
+
 PeerConnectionClient.prototype.addStream = function(stream) {
   if (!this.pc_) {
     return;
