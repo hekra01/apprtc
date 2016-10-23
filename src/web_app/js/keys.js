@@ -18,13 +18,10 @@
       event = window.event;
     }
 
-    if (eventType == "onkeydown")
-    {
-      var canSend = false;
-      if (canSend && KEYS.hasOwnProperty(event.keyCode)) {
-        var key = "KPRESSED,65363," + KEYS[event.keyCode] + '\n'+ "KRELEASED,65363," + KEYS[event.keyCode] + '\n';
-        // TODO  send kSocket.send(key);
-      }
+    var canSend = false;
+    if (canSend && KEYS.hasOwnProperty(event.keyCode)) {
+      var key = "KPRESSED,65363," + KEYS[event.keyCode] + '\n'+ "KRELEASED,65363," + KEYS[event.keyCode] + '\n';
+      // TODO  send kSocket.send(key);
     }
   };
   document.addEventListener("keydown", processKeyDown, false);
