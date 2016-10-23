@@ -54,16 +54,6 @@ var UI_CONSTANTS = {
 var AppController = function(loadingParams) {
   trace('Initializing; server= ' + loadingParams.roomServer + '.');
   trace('Initializing; room=' + loadingParams.roomId + '.');
-  var KEYS = { 
-      /*BACK/backspace*/ 8:4, 
-      /*HOME/ESC*/ 27:111, 
-      /*UP*/38:24, 
-      /*LEFT*/37:21, 
-      /*RIGHT*/39:22, 
-      /*DOWN*/40:20, 
-      /*OK/ENTER*/13:66, 
-      /*PLAY/SPACE*/32:62
-  };  
   this.hangupSvg_ = $(UI_CONSTANTS.hangupSvg);
   this.icons_ = $(UI_CONSTANTS.icons);
   this.localVideo_ = $(UI_CONSTANTS.localVideo);
@@ -447,6 +437,16 @@ AppController.prototype.onKeyPress_ = function(event) {
     {
       event = window.event;
     }
+    var KEYS = {
+      /*BACK/backspace*/ 8:4, 
+      /*HOME/ESC*/ 27:111, 
+      /*UP*/38:24, 
+      /*LEFT*/37:21, 
+      /*RIGHT*/39:22, 
+      /*DOWN*/40:20, 
+      /*OK/ENTER*/13:66, 
+      /*PLAY/SPACE*/32:62
+    };  
     if (KEYS.hasOwnProperty(event.keyCode)) {
       var key = "KPRESSED,65363," + KEYS[event.keyCode] + '\n'+ "KRELEASED,65363," + KEYS[event.keyCode] + '\n';
       this.call_.sendData(key);
