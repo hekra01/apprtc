@@ -334,7 +334,7 @@ AppController.prototype.transitionToActive_ = function() {
 
   // Transition opacity from 0 to 1 for the remote and mini videos.
   this.activate_(this.remoteVideo_);
-  this.activate_(this.miniVideo_);
+  //this.activate_(this.miniVideo_);
   // Transition opacity from 1 to 0 for the local video.
   this.deactivate_(this.localVideo_);
   this.localVideo_.srcObject = null;
