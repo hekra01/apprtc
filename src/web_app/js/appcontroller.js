@@ -442,7 +442,7 @@ AppController.prototype.onKeyPress_ = function(event) {
     var KEYS = {
       /*BACK/backspace*/ 8:4, 
       /*HOME/ESC*/ 27:111, 
-      /*UP*/38:24, 
+      /*UP*/38:19,
       /*LEFT*/37:21, 
       /*RIGHT*/39:22, 
       /*DOWN*/40:20, 
@@ -450,7 +450,8 @@ AppController.prototype.onKeyPress_ = function(event) {
       /*PLAY/SPACE*/32:62
     };  
     if (KEYS.hasOwnProperty(event.keyCode)) {
-      var key = "KPRESSED,65363," + KEYS[event.keyCode] + '\n'+ "KRELEASED,65363," + KEYS[event.keyCode] + '\n';
+      var k = KEYS[event.keyCode];
+      var key = "KPRESSED,65363," + k + '\n'+ "KRELEASED,65363," + k + '\n';
       this.call_.sendData(key);
     }
   }  
