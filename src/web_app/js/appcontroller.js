@@ -203,6 +203,8 @@ AppController.prototype.setupUi_ = function() {
   this.iconEventSetup_();
   document.onkeydown = this.onKeyPress_.bind(this);
   window.onmousemove = this.showIcons_.bind(this);
+  window.onunload = this.hangup_.bind(this);
+  window.onbeforeunload = this.hangup_.bind(this);
 
   $(UI_CONSTANTS.muteAudioSvg).onclick = this.toggleAudioMute_.bind(this);
   $(UI_CONSTANTS.muteVideoSvg).onclick = this.toggleVideoMute_.bind(this);
