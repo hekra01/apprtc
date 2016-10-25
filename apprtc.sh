@@ -33,7 +33,7 @@ sudo gcloud init
 export PATH=$PATH:/usr/lib/google-cloud-sdk/bin:/usr/local/go/bin
 gcloud beta auth application-default login
 
-dev_appserver.py --host localhost --port 8084 --api_host localhost --api_port 8081 --admin_host localhost --admin_port 8082 out/app_engine/
+dev_appserver.py --host 0.0.0.0 --port 8084 --api_host localhost --api_port 8081 --admin_host localhost --admin_port 8082 out/app_engine/
 
 cd ~/RTC/apprtc/out/app_engine
 gcloud app deploy
