@@ -195,7 +195,7 @@ PeerConnectionClient.prototype.close = function() {
     return;
   }
 
-  if (!this.dataChannel_) {
+  if (this.dataChannel_) {
     this.dataChannel_.close();
     this.dataChannel_ = null;
   }
