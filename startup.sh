@@ -6,5 +6,5 @@ export GOPATH=/home/ubuntu/RTC/GO
 export PATH=$PATH:/home/ubuntu/google-cloud-sdk/bin/:/home/ubuntu/google-cloud-sdk/platform/google_appengine
 export PATH=$PATH:/usr/lib/google-cloud-sdk/bin:/usr/local/go/bin:/home/ubuntu/RTC/depot_tools
 export ROOM_DIR=/home/ubuntu/RTC/apprtc
-cd $ROOM_DIR &&dev_appserver.py --host 0.0.0.0 --port 8084 --api_host localhost --api_port 8081 --admin_host localhost --admin_port 8082 out/app_engine/
+cd $ROOM_DIR && grunt build && dev_appserver.py --host 0.0.0.0 --port 8084 --api_host localhost --api_port 8081 --admin_host localhost --admin_port 8082 out/app_engine/
 
