@@ -51,13 +51,13 @@ InfoBox.prototype.recordIceCandidateTypes = function(location, candidate) {
 InfoBox.prototype.pushErrorMessage = function(msg) {
   this.errorMessages_.push(msg);
   this.updateInfoDiv();
-  this.showInfoDiv();
+  //this.showInfoDiv();
 };
 
 InfoBox.prototype.pushWarningMessage = function(msg) {
   this.warningMessages_.push(msg);
   this.updateInfoDiv();
-  this.showInfoDiv();
+  //this.showInfoDiv();
 };
 
 InfoBox.prototype.setSetupTimes = function(startTime, connectTime) {

@@ -436,6 +436,9 @@ def remove_client_from_room(host, room_id, client_id):
       return {'error': constants.RESPONSE_UNKNOWN_CLIENT, 'room_state': None}
 
     room.remove_client(client_id)
+    logging.info('########################### Removed client %s from room %s' \
+          %(client_id, room_id))
+
     if room.has_client(constants.LOOPBACK_CLIENT_ID):
       room.remove_client(constants.LOOPBACK_CLIENT_ID)
     if room.get_occupancy() > 0:
