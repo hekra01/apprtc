@@ -16,7 +16,7 @@ export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 export ROOM_DIR=/home/ubuntu/RTC/apprtc
 case "$1" in
  start)
-   cd $ROOM_DIR && $ROOM_DIR/startup.sh
+   cd $ROOM_DIR && $ROOM_DIR/startup.sh > /var/log/roomserver.log 2>&1
    ;;
  stop)
    sleep 10
