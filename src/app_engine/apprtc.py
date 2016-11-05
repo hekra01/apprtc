@@ -124,8 +124,6 @@ def get_wss_parameters(request):
   wss_tls = request.get('wstls')
 
   if not wss_host_port_pair:
-    logging.info('##########get wss request NO wss_host_port_pair ')
-
     # Attempt to get a wss server from the status provided by prober,
     # if that fails, use fallback value.
     memcache_client = memcache.Client()
@@ -138,17 +136,12 @@ def get_wss_parameters(request):
           + json.dumps(wss_active_host))
       wss_host_port_pair = constants.WSS_HOST_PORT_PAIRS[0]
 
-    logging.info('##########get wss request wss_host_port_pair set to  '+wss_host_port_pair)
-    logging.info('##########get wss request wss_tls set to  '+wss_tls)
-
   if wss_tls and wss_tls == 'false':
     wss_url = 'ws://' + wss_host_port_pair + '/ws'
     wss_post_url = 'http://' + wss_host_port_pair
   else:
     wss_url = 'wss://' + wss_host_port_pair + '/ws'
     wss_post_url = 'https://' + wss_host_port_pair
-
-    logging.info('##########get wss request wss_url set to:'+wss_url+ "wss_post_url="+wss_post_url)
 
   return (wss_url, wss_post_url)
 
