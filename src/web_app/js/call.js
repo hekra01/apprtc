@@ -349,8 +349,8 @@ Call.prototype.connectToRoom_ = function(roomId) {
 Call.prototype.maybeGetMedia_ = function() {
   // mediaConstraints.audio and mediaConstraints.video could be objects, so
   // check '!=== false' instead of '=== true'.
-  var needStream = false;//(this.params_.mediaConstraints.audio !== false ||
-                   // this.params_.mediaConstraints.video !== false);
+  var needStream = (this.params_.mediaConstraints.audio !== false ||
+                    this.params_.mediaConstraints.video !== false);
   var mediaPromise = null;
   if (needStream) {
     var mediaConstraints = this.params_.mediaConstraints;
@@ -418,7 +418,7 @@ Call.prototype.onUserMediaError_ = function(error) {
       error.name + '. Continuing without sending a stream.';
   this.onError_('getUserMedia error: ' + errorMessage);
   this.errorMessageQueue_.push(error);
-  alert(errorMessage);
+  //alert(errorMessage);
 };
 
 // TODO(jansson) Change this to a generic reporting method when callstats
