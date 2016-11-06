@@ -519,6 +519,10 @@ Call.prototype.joinRoom_ = function() {
         // TODO (chuckhays) : handle room full state by returning to room selection state.
         // When room is full, responseObj.result === 'FULL'
         reject(Error('Registration error: ' + responseObj.result));
+        if (responseObj.result === 'FULL') {
+          var gpath = this.roomServer_ + '/r/' + this.params_.roomId + window.location.search;
+          window.location.assign(gpath);
+        }
         return;
       }
       trace('Joined the room.');
