@@ -341,6 +341,7 @@ AppController.prototype.transitionToActive_ = function() {
   this.activate_(this.videosDiv_);
   this.show_(this.hangupSvg_);
   this.displayStatus_('');
+  this.deactivate_(this.sharingDiv_);
 };
 
 AppController.prototype.transitionToWaiting_ = function() {
@@ -368,6 +369,7 @@ AppController.prototype.transitionToWaiting_ = function() {
   // Transition opacity from 1 to 0 for the remote and mini videos.
   this.deactivate_(this.remoteVideo_);
   this.deactivate_(this.miniVideo_);
+  this.activate_(this.sharingDiv_);
 };
 
 AppController.prototype.transitionToDone_ = function() {
@@ -402,7 +404,9 @@ AppController.prototype.onNewRoomClick_ = function() {
 // q: quit (hangup)
 // Return false to screen out original Chrome shortcuts.
 AppController.prototype.onKeyPress_ = function(event) {
-  switch (String.fromCharCode(event.charCode)) {
+  //var c = String.fromCharCode(event.charCode);
+  var c = event.key;
+  switch (c) {
     case ' ':
     case 'm':
       if (this.call_) {
