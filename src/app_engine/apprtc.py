@@ -360,6 +360,9 @@ def get_memcache_key_for_room(host, room_id):
 
 def add_client_to_room(request, room_id, client_id, is_loopback):
   key = get_memcache_key_for_room(request.host_url, room_id)
+
+  logging.info('add_client_to_room: ' + room_id + ' key ' + key)
+
   memcache_client = memcache.Client()
   error = None
   retries = 0
@@ -379,6 +382,9 @@ def add_client_to_room(request, room_id, client_id, is_loopback):
       room = memcache_client.gets(key)
 
     occupancy = room.get_occupancy()
+
+    logging.info('room occupancy: ' + str(occupancy) + ' key ' + key)
+
     if occupancy >= 2:
       error = constants.RESPONSE_ROOM_FULL
       break
@@ -415,6 +421,9 @@ def add_client_to_room(request, room_id, client_id, is_loopback):
 
 def remove_client_from_room(host, room_id, client_id):
   key = get_memcache_key_for_room(host, room_id)
+
+  logging.info('remove_client_from_room: ' + room_id + ' key ' + key)
+
   memcache_client = memcache.Client()
   retries = 0
   # Compare and set retry loop.
@@ -461,6 +470,9 @@ def save_message_from_client(host, room_id, client_id, message):
     if not room.has_client(client_id):
       logging.warning('Unknown client: ' + client_id)
       return {'error': constants.RESPONSE_UNKNOWN_CLIENT, 'saved': False}
+
+    logging.info('room occupancy: ' + str(room.get_occupancy()) + ' key ' + key)
+
     if room.get_occupancy() > 1:
       return {'error': None, 'saved': False}
 
@@ -474,6 +486,9 @@ def save_message_from_client(host, room_id, client_id, message):
 
 class LeavePage(webapp2.RequestHandler):
   def post(self, room_id, client_id):
+
+    logging.info('LeavePage room_id: ' + room_id + ' client ' + client_id)
+
     result = remove_client_from_room(
         self.request.host_url, room_id, client_id)
     if result['error'] is None:
@@ -489,6 +504,10 @@ class MessagePage(webapp2.RequestHandler):
                  ' client ' + client_id)
     wss_url, wss_post_url = get_wss_parameters(self.request)
     url = wss_post_url + '/' + room_id + '/' + client_id
+
+    logging.info('Forwarding message to collider for room ' + room_id +
+                 ' client ' + client_id + ' collider url ' + url)
+
     result = urlfetch.fetch(url=url,
                             payload=message,
                             method=urlfetch.POST)
@@ -504,6 +523,9 @@ class MessagePage(webapp2.RequestHandler):
     message_json = self.request.body
     result = save_message_from_client(
         self.request.host_url, room_id, client_id, message_json)
+
+    logging.info('MessagePage post message_json ' + message_json)
+
     if result['error'] is not None:
       self.write_response(result['error'])
       return
@@ -533,6 +555,9 @@ class JoinPage(webapp2.RequestHandler):
 
   def post(self, room_id):
     client_id = generate_random(8)
+
+    logging.info('JoinPage room_id: ' + room_id + ' client ' + client_id)
+
     is_loopback = self.request.get('debug') == 'loopback'
     result = add_client_to_room(self.request, room_id, client_id, is_loopback)
     if result['error'] is not None:
