@@ -404,9 +404,8 @@ AppController.prototype.onNewRoomClick_ = function() {
 // q: quit (hangup)
 // Return false to screen out original Chrome shortcuts.
 AppController.prototype.onKeyPress_ = function(event) {
-  //var c = String.fromCharCode(event.charCode);
-  var c = event.key;
-  switch (c) {
+    var c = String.fromCharCode(event.keyCode).toLowerCase();
+    switch (c) {
     case ' ':
     case 'm':
       if (this.call_) {
