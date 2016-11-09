@@ -441,6 +441,7 @@ AppController.prototype.onKeyPress_ = function(event) {
       event = window.event;
     }
     var KEYS = {
+      /*F4/HOME*/ 115:3,       
       /*BACK/backspace*/ 8:4, 
       /*HOME/ESC*/ 27:111, 
       /*UP*/38:19,
