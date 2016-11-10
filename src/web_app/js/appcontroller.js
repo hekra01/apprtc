@@ -441,20 +441,38 @@ AppController.prototype.onKeyPress_ = function(event) {
       event = window.event;
     }
     var KEYS = {
-      /*F4/HOME*/ 115:3,       
-      /*BACK/backspace*/ 8:4, 
-      /*HOME/ESC*/ 27:111, 
+      /*F4/HOME*/ 77:3,
+      /*backspace/BACK*/ 8:4,
+      /*ESC*/ 27:111,
       /*UP*/38:19,
-      /*LEFT*/37:21, 
-      /*RIGHT*/39:22, 
-      /*DOWN*/40:20, 
-      /*OK/ENTER*/13:66, 
-      /*PLAY/SPACE*/32:62
+      /*LEFT*/37:21,
+      /*RIGHT*/39:22,
+      /*DOWN*/40:20,
+      /*OK/ENTER*/13:66,
+      /*SPACE/PLAY*/32:62
     };  
-    if (KEYS.hasOwnProperty(event.keyCode)) {
-      var k = KEYS[event.keyCode];
-      var key = "KPRESSED,65363," + k + '\n'+ "KRELEASED,65363," + k + '\n';
-      this.call_.sendData(key);
+    var ALPHA_MIN = 65;
+    var ALPHA_MAX = 90;
+    var NUMPAD_MIN = 96;
+    var NUMPAD_MAX = 105;
+    var NUM_MIN = 96;
+    var NUM_MAX = 105;
+
+    var k = -1;
+
+    if (KEYS.hasOwnProperty(event.keyCode))
+      k = KEYS[event.keyCode];
+    else if (event.keyCode >= ALPHA_MIN && event.keyCode <= ALPHA_MAX)
+      k = event.keyCode - 26;
+    else if (event.keyCode >= NUMPAD_MIN && event.keyCode <= NUMPAD_MAX)
+      k = event.keyCode + 48;
+    else if (event.keyCode >= NUM_MIN && event.keyCode <= NUM_MAX)
+      k = event.keyCode - 41;
+
+    if (k >= 0) {
+      this.call_.sendData("KPRESSED,65363," + k + '\n'+ "KRELEASED,65363," + k + '\n');
+      /* prevent OS precessing */
+      return false;
     }
   }  
 };
