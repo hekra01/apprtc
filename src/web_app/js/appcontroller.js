@@ -73,6 +73,8 @@ var AppController = function(loadingParams) {
       this.onNewRoomClick_.bind(this), false);
   this.rejoinButton_.addEventListener('click',
       this.onRejoinClick_.bind(this), false);
+  this.videosDiv_.addEventListener(
+      'click', this.onVideoClick_.bind(this), false);
 
   this.muteAudioIconSet_ =
       new AppController.IconSet_(UI_CONSTANTS.muteAudioSvg);
@@ -395,6 +397,18 @@ AppController.prototype.onNewRoomClick_ = function() {
   this.deactivate_(this.rejoinDiv_);
   this.hide_(this.rejoinDiv_);
   this.showRoomSelection_();
+};
+
+AppController.prototype.onVideoClick_ = function(event) {
+  console.log("video click " + event.x + " " + event.y + " " + this.remoteVideo_.videoWidth + " " + this.remoteVideo_.videoHeight);
+  var videoWidth = this.remoteVideo_.videoWidth;
+  var videoHeight = this.remoteVideo_.videoHeight;
+  var x = event.x / videoWidth;
+  var y = event.y / videoHeight;
+  var cmd = "MDOWN," + x + "," + y + '\n' + "MUP," + x + "," + y + '\n';
+
+  if (this.remoteVideo_ && this.remoteVideo_.readyState >= 2)
+    this.call_.sendData(cmd);
 };
 
 // Spacebar, or m: toggle audio mute.
