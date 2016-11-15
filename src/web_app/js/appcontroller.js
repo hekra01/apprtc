@@ -399,12 +399,50 @@ AppController.prototype.onNewRoomClick_ = function() {
   this.showRoomSelection_();
 };
 
+AppController.prototype.innerWidth_ = function() {
+   return window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth||0;
+}
+
+AppController.prototype.innerHeight_ = function() {
+   return window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight||0;
+}
+
+
 AppController.prototype.onVideoClick_ = function(event) {
   console.log("video click " + event.x + " " + event.y + " " + this.remoteVideo_.videoWidth + " " + this.remoteVideo_.videoHeight);
-  var videoWidth = this.remoteVideo_.videoWidth;
-  var videoHeight = this.remoteVideo_.videoHeight;
-  var x = event.x / videoWidth;
-  var y = event.y / videoHeight;
+  var x = event.x;
+  var y = event.y;
+  var iw = this.innerWidth_();
+  var ih = this.innerHeight_();
+  var aspectRatio_ = 16/9;
+  var vx, vy, vw, vh;
+
+  if (true || this.remoteVideo_.style.objectFit === "contain") {
+    if (ih * aspectRatio_  < iw) {
+      //Centered horizontally
+      vh = ih;
+      vw = ih * aspectRatio_;
+      vx = (iw - vw) / 2;
+      vy = 0;
+    }
+    else {
+      //Centered vertically
+      vw = iw;
+      vh = vw / aspectRatio_;
+      vx = 0;
+      vy = (ih - vh) / 2;
+    }
+
+    var inside = x >= vx  && x <= vx + vw && y >= vy && y <= vy + vh;
+    if (!inside)
+      return;
+    x = (x - vx)/ vw;
+    y = (y - vy) / vh;
+  }
+  else {
+    //TODO cover
+  }
+
   var cmd = "MDOWN," + x + "," + y + '\n' + "MUP," + x + "," + y + '\n';
 
   if (this.remoteVideo_ && this.remoteVideo_.readyState >= 2)
@@ -564,6 +602,11 @@ AppController.prototype.show_ = function(element) {
 
 AppController.prototype.activate_ = function(element) {
   element.classList.add('active');
+  /*
+  if (element === this.videosDiv_) {
+    element.style["width"] = this.remoteVideo_.videoWidth;
+    element.style["height"] = this.remoteVideo_.videoHeight
+  }*/
 };
 
 AppController.prototype.deactivate_ = function(element) {
