@@ -456,6 +456,7 @@ AppController.prototype.onVideoClick_ = function(event) {
 // q: quit (hangup)
 // Return false to screen out original Chrome shortcuts.
 AppController.prototype.onKeyPress_ = function(event) {
+  /*
     var c = String.fromCharCode(event.keyCode).toLowerCase();
     switch (c) {
     case ' ':
@@ -485,7 +486,8 @@ AppController.prototype.onKeyPress_ = function(event) {
       return false;
     default:
       break;
-  }
+  }*/
+
   if (this.remoteVideo_ && this.remoteVideo_.readyState >= 2) {
     // MSIE hack
     if (window.event)
@@ -503,6 +505,10 @@ AppController.prototype.onKeyPress_ = function(event) {
       /*OK/ENTER*/13:66,
       /*SPACE/PLAY*/32:62,
       /*DELETE*/ 46:67,
+      /*DOT*/190:158,
+      /*DOT*/110:158,
+      /*PGUP*/ 33:92,
+      /*PGDOWN*/34:93,
     };  
     var ALPHA_MIN = 65;
     var ALPHA_MAX = 90;
