@@ -501,7 +501,8 @@ AppController.prototype.onKeyPress_ = function(event) {
       /*RIGHT*/39:22,
       /*DOWN*/40:20,
       /*OK/ENTER*/13:66,
-      /*SPACE/PLAY*/32:62
+      /*SPACE/PLAY*/32:62,
+      /*DELETE*/ 46:67,
     };  
     var ALPHA_MIN = 65;
     var ALPHA_MAX = 90;
