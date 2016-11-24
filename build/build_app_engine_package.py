@@ -132,15 +132,14 @@ def CopyApprtcSource(src_path, dest_path):
             or name.endswith('.yaml')):
           shutil.copy(os.path.join(dirpath, name), dest_path)
     elif dirpath.endswith('js'):
+      dest_js_path = os.path.join(dest_path, 'js')
+      os.makedirs(dest_js_path)
       for name in files:
         # loopback.js is not compiled by Closure and needs to be copied
-        # separately.
-        if name == 'loopback.js':
-          dest_js_path = os.path.join(dest_path, 'js')
-          os.makedirs(dest_js_path)
+        # separately
+        if name == 'loopback.js' or name == 'timeout-dialog.js':
           shutil.copy(os.path.join(dirpath, name), dest_js_path)
-          break
-
+  
   build_version_info_file(os.path.join(dest_path, 'version_info.json'))
 
 

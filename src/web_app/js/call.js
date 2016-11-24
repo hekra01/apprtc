@@ -493,6 +493,7 @@ Call.prototype.startSignaling_ = function() {
       this.pcClient_.startAsCallee(this.params_.messages);
     }
     this.maybeReportGetUserMediaErrors_();
+    this.startleaveTimeOut_();
   }.bind(this))
   .catch(function(e) {
     this.onError_('Create PeerConnection exception: ' + e);
@@ -565,4 +566,11 @@ Call.prototype.onError_ = function(message) {
 
 Call.prototype.sendData = function(message) {
   this.pcClient_.sendData(message);
+};
+
+Call.prototype.startleaveTimeOut_ = function() {
+  var redirect_url = window.location.href;
+  var totalTimeout = 10 * 60;
+  var countDown = 60;
+  jQuery.timeoutDialog({timeout: totalTimeout, countdown: countDown, logout_redirect_url: redirect_url, restart_on_yes: true});
 };
