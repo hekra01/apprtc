@@ -173,7 +173,10 @@ def get_callstats_params():
 
 # Returns appropriate room parameters based on query parameters in the request.
 # TODO(tkchin): move query parameter parsing to JS code.
-def get_room_parameters(request, room_id, client_id, is_initiator):
+def get_room_parameters(request, room_i, client_id, is_initiator):
+  room_id = room_i
+  if room_id == "shuttle-instance-4":
+      room_id = "shuttle-instance4"
   error_messages = []
   warning_messages = []
   # Get the base url without arguments.
@@ -355,10 +358,17 @@ class Room:
   def __str__(self):
     return str(self.clients.keys())
 
-def get_memcache_key_for_room(host, room_id):
+def get_memcache_key_for_room(host, room_i):
+  room_id = room_i
+  if room_id == "shuttle-instance-4":
+    room_id = "shuttle-instance4"
   return '%s/%s' % (host, room_id)
 
-def add_client_to_room(request, room_id, client_id, is_loopback):
+def add_client_to_room(request, room_i, client_id, is_loopback):
+  room_id = room_i
+  if room_id == "shuttle-instance-4":
+    room_id = "shuttle-instance4"
+
   key = get_memcache_key_for_room(request.host_url, room_id)
 
   logging.info('add_client_to_room: ' + room_id + ' key ' + key)
@@ -419,7 +429,10 @@ def add_client_to_room(request, room_id, client_id, is_loopback):
   return {'error': error, 'is_initiator': is_initiator,
           'messages': messages, 'room_state': str(room)}
 
-def remove_client_from_room(host, room_id, client_id):
+def remove_client_from_room(host, room_i, client_id):
+  room_id = room_i
+  if room_id == "shuttle-instance-4":
+    room_id = "shuttle-instance4"  
   key = get_memcache_key_for_room(host, room_id)
 
   logging.info('remove_client_from_room: ' + room_id + ' key ' + key)
@@ -451,7 +464,10 @@ def remove_client_from_room(host, room_id, client_id):
       return {'error': None, 'room_state': str(room)}
     retries = retries + 1
 
-def save_message_from_client(host, room_id, client_id, message):
+def save_message_from_client(host, room_i, client_id, message):
+  room_id = room_i
+  if room_id == "shuttle-instance-4":
+    room_id = "shuttle-instance4"  
   text = None
   try:
       text = message.encode(encoding='utf-8', errors='strict')
@@ -485,9 +501,11 @@ def save_message_from_client(host, room_id, client_id, message):
     retries = retries + 1
 
 class LeavePage(webapp2.RequestHandler):
-  def post(self, room_id, client_id):
-
-    logging.info('LeavePage room_id: ' + room_id + ' client ' + client_id)
+  def post(self, room_i, client_id):
+    room_id = room_i
+    if room_id == "shuttle-instance-4":
+      room_id = "shuttle-instance4"
+    logging.info('LeavePage Room_id: ' + room_id + ' client ' + client_id)
 
     result = remove_client_from_room(
         self.request.host_url, room_id, client_id)
@@ -499,7 +517,10 @@ class MessagePage(webapp2.RequestHandler):
     content = json.dumps({ 'result' : result })
     self.response.write(content)
 
-  def send_message_to_collider(self, room_id, client_id, message):
+  def send_message_to_collider(self, room_i, client_id, message):
+    room_id = room_i
+    if room_id == "shuttle-instance-4":
+      room_id = "shuttle-instance4"
     logging.info('Forwarding message to collider for room ' + room_id +
                  ' client ' + client_id)
     wss_url, wss_post_url = get_wss_parameters(self.request)
@@ -519,7 +540,10 @@ class MessagePage(webapp2.RequestHandler):
       return
     self.write_response(constants.RESPONSE_SUCCESS)
 
-  def post(self, room_id, client_id):
+  def post(self, room_i, client_id):
+    room_id = room_i
+    if room_id == "shuttle-instance-4":
+      room_id = "shuttle-instance4"
     message_json = self.request.body
     result = save_message_from_client(
         self.request.host_url, room_id, client_id, message_json)
@@ -549,13 +573,20 @@ class JoinPage(webapp2.RequestHandler):
       'params': params
     }))
 
-  def write_room_parameters(self, room_id, client_id, messages, is_initiator):
+  def write_room_parameters(self, room_i, client_id, messages, is_initiator):
+    room_id = room_i
+    if room_id == "shuttle-instance-4":
+      room_id = "shuttle-instance4"
+    logging.info('write_room_parameters: ' + room_id)
     params = get_room_parameters(self.request, room_id, client_id, is_initiator)
     self.write_response('SUCCESS', params, messages)
 
-  def post(self, room_id):
+  def post(self, room_i):
     client_id = generate_random(8)
-
+    room_id = room_i
+    if room_id == "shuttle-instance-4":
+      room_id = "shuttle-instance4"
+  
     logging.info('JoinPage room_id: ' + room_id + ' client ' + client_id)
 
     is_loopback = self.request.get('debug') == 'loopback'
@@ -593,7 +624,10 @@ class RoomPage(webapp2.RequestHandler):
     content = template.render(params)
     self.response.out.write(content)
 
-  def get(self, room_id):
+  def get(self, room_i):
+    room_id = room_i
+    if room_id == "shuttle-instance-4":
+      room_id = "shuttle-instance4"
     """Renders index.html or full.html."""
     # Check if room is full.
     room = memcache.get(
