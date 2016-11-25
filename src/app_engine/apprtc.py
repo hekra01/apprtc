@@ -347,6 +347,11 @@ class Room:
     return client_id in self.clients
   def get_client(self, client_id):
     return self.clients[client_id]
+  def get_client_list(self):
+    client_list = []
+    for key, client in self.clients.items():
+      client_list.append(key)
+    return client_list
   def get_other_client(self, client_id):
     for key, client in self.clients.items():
       if key is not client_id:
@@ -425,6 +430,7 @@ def remove_client_from_room(host, room_id, client_id):
   logging.info('remove_client_from_room: ' + room_id + ' key ' + key)
 
   memcache_client = memcache.Client()
+
   retries = 0
   # Compare and set retry loop.
   while True:
@@ -488,6 +494,19 @@ class LeavePage(webapp2.RequestHandler):
   def post(self, room_id, client_id):
 
     logging.info('LeavePage room_id: ' + room_id + ' client ' + client_id)
+
+    if client_id == "all":
+      key = get_memcache_key_for_room(self.request.host_url, room_id)
+      memcache_client = memcache.Client()
+      room = memcache_client.gets(key)
+      if room is None:
+        logging.warning('remove_client_from_room: Unknown room ' + room_id)
+        return {'error': constants.RESPONSE_UNKNOWN_ROOM, 'room_state': None}
+      client_list = room.get_client_list();
+      for cl_id in client_list:
+        result = remove_client_from_room(self.request.host_url, room_id, cl_id)
+        if result['error'] is None:
+          logging.info('Room ' + room_id + ' has state ' + result['room_state'])
 
     result = remove_client_from_room(
         self.request.host_url, room_id, client_id)
