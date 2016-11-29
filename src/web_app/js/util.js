@@ -103,7 +103,7 @@ function requestIceServers(iceServerRequestUrl, iceTransports) {
         ]
       },
       {
-        urls: ['stun:stun.meetme.id:443', 'stun:10.60.51.194:3478']
+        urls: ['stun:stun.meetme.id:443']
       }
     ];
     resolve(servers);
