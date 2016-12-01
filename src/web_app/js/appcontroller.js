@@ -69,6 +69,13 @@ var AppController = function(loadingParams) {
   this.rejoinButton_ = $(UI_CONSTANTS.rejoinButton);
   this.newRoomButton_ = $(UI_CONSTANTS.newRoomButton);
 
+  /* Touch events */
+  this.mc_ = new Hammer(this.videosDiv_ );
+  var pinch = new Hammer.Pinch();
+  this.mc_.add([pinch]);
+  this.mc_.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+  this.mc_.on('pinch panstart doubletap tap press', this.onTouch_.bind(this));
+
   this.newRoomButton_.addEventListener('click',
       this.onNewRoomClick_.bind(this), false);
   this.rejoinButton_.addEventListener('click',
@@ -449,6 +456,46 @@ AppController.prototype.onVideoClick_ = function(event) {
     this.call_.sendData(cmd);
 };
 
+AppController.prototype.onTouch_ = function(event) {
+  var rv = this.remoteVideo_;
+  if (this.remoteVideo_ && this.remoteVideo_.readyState >= 2) {
+    console.log("Pan type " + event.type);
+
+    if (event.type == "tap") {
+      var pos = event.pointers[0];
+      var x = pos.clientX;
+      var y = pos.clientY;
+      event.x = x;
+      event.y = y;
+      this.onVideoClick_(event);
+      return;
+    }
+
+    var k = -1;
+
+    if (event.type == "press")
+      k = 66;
+    else if (event.type == "panstart"){
+       if ( event.additionalEvent == "panleft")
+        k = 22;
+      else if (event.additionalEvent == "panright")
+        k = 21;
+      else if (event.additionalEvent == "panup")
+        k = 20;
+      else if (event.additionalEvent == "pandown")
+        k = 19;
+    }
+    else if (event.type == "pinch" && event.additionalEvent == "pinchin")
+      k = 4;
+
+    if (k >= 0) {
+      this.call_.sendData("KPRESSED,65363," + k + '\n'+ "KRELEASED,65363," + k + '\n');
+      /* prevent OS precessing */
+      return false;
+    }
+  }
+};
+
 // Spacebar, or m: toggle audio mute.
 // c: toggle camera(video) mute.
 // f: toggle fullscreen.
@@ -456,38 +503,6 @@ AppController.prototype.onVideoClick_ = function(event) {
 // q: quit (hangup)
 // Return false to screen out original Chrome shortcuts.
 AppController.prototype.onKeyPress_ = function(event) {
-  /*
-    var c = String.fromCharCode(event.keyCode).toLowerCase();
-    switch (c) {
-    case ' ':
-    case 'm':
-      if (this.call_) {
-        this.call_.toggleAudioMute();
-        this.muteAudioIconSet_.toggle();
-      }
-      return false;
-    case 'c':
-      if (this.call_) {
-        this.call_.toggleVideoMute();
-        this.muteVideoIconSet_.toggle();
-      }
-      return false;
-    case 'f':
-      this.toggleFullScreen_();
-      return false;
-    case 'i':
-      this.infoBox_.toggleInfoDiv();
-      return false;
-    case 'q':
-      this.hangup_();
-      return false;
-    case 'l':
-      this.toggleMiniVideo_();
-      return false;
-    default:
-      break;
-  }*/
-
   if (this.remoteVideo_ && this.remoteVideo_.readyState >= 2) {
     // MSIE hack
     if (window.event)
