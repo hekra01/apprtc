@@ -471,7 +471,7 @@ AppController.prototype.onTouch_ = function(event) {
       return;
     }
 
-    var k = -1;
+    var k = -1 , repeats = 1;
 
     if (event.type == "press")
       k = 66;
@@ -484,16 +484,41 @@ AppController.prototype.onTouch_ = function(event) {
         k = 20;
       else if (event.additionalEvent == "pandown")
         k = 19;
+      repeats = this.panRepeats_(event);
     }
     else if (event.type == "pinch" && event.additionalEvent == "pinchin")
       k = 4;
 
     if (k >= 0) {
-      this.call_.sendData("KPRESSED,65363," + k + '\n'+ "KRELEASED,65363," + k + '\n');
+      for (var i = 0; i < repeats; i++) {
+        this.call_.sendData("KPRESSED,65363," + k + '\n'+ "KRELEASED,65363," + k + '\n');
+      }
       /* prevent OS precessing */
       return false;
     }
   }
+};
+
+AppController.prototype.panRepeats_ = function(event) {
+  if (true) return 1;
+  var velocity = Math.abs(event.velocity) * 100;
+  var incr, thresh, unit;
+
+  if ( event.additionalEvent == "panleft" || event.additionalEvent == "panright") {
+    thresh = 15;
+    incr = 2;
+    unit = 1;
+  }
+  else if (event.additionalEvent == "panup" ||  event.additionalEvent == "pandown") {
+    thresh = 12;
+    incr = 2;
+    unit = 2;
+  }
+  if (velocity < thresh)
+    return 1;
+
+  var diff = Math.ceil((velocity - thresh)/unit);
+  return incr * diff;
 };
 
 // Spacebar, or m: toggle audio mute.
