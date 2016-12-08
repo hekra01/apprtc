@@ -53,3 +53,7 @@ openssl rsa -in privkey.pem -out privkey.pem
 sudo mv privkey.pem /cert/key.pem
 sudo mv server.pem /cert/cert.pem
 $GOPATH/bin/collidermain -port=8089 -tls=true -room-server=apprtc-147002.appspot.com
+
+######4-Ubuntu service
+sudo ln -sr ./roomserver /etc/init.d/roomserver
+sudo update-rc.d roomserver defaults
