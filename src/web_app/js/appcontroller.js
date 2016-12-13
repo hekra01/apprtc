@@ -542,7 +542,7 @@ AppController.prototype.onKeyPress_ = function(event) {
       /*LEFT*/37:21,
       /*RIGHT*/39:22,
       /*DOWN*/40:20,
-      /*OK/ENTER*/13:66,
+      /*OK/ENTER*/13:23,
       /*SPACE/PLAY*/32:62,
       /*DELETE*/ 46:67,
       /*DOT*/190:158,
